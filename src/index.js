@@ -369,12 +369,12 @@ export default class extends PureComponent {
     ) {
       // Start drawing and add point
       this.isDrawing = true;
-      this.points.push(this.lazy.brush.toObject());
+      this.points.push({ ...this.lazy.brush.toObject(), timestamp: Date.now() });
     }
 
     if (this.isDrawing) {
       // Add new point
-      this.points.push(this.lazy.brush.toObject());
+      this.points.push({ ...this.lazy.brush.toObject(), timestamp: Date.now() });
 
       // Draw current points
       this.drawPoints({
