@@ -192,9 +192,9 @@ export default class extends PureComponent {
     });
   };
 
-  getDataBlob = () => {
+  getDataBlob = (fn) => {
     return this.canvas.drawing.toBlob( blob => {
-      return blob
+      fn(blob);
     }, "image/jpeg")
   }
 
