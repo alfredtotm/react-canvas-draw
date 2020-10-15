@@ -193,7 +193,7 @@ export default class extends PureComponent {
   };
 
   getDataBlob = async () => {
-    return await this.canvas.toBlob( blob => {
+    return await this.canvas.drawing.toBlob( blob => {
       return URL.createObjectURL(blob);
     }, 'image/jpg')
   }
