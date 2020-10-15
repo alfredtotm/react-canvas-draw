@@ -183,6 +183,48 @@ export default class extends PureComponent {
     this.triggerOnChange();
   };
 
+  canvasToRasterImage = (canvas, type, backgroundColor) => {
+    let context = canvas.getContext("2d")
+    //cache height and width		
+    let w = canvas.width;
+    let h = canvas.height;
+    let data;		
+
+    if(backgroundColor){
+      //get the current ImageData for the canvas.
+      data = context.getImageData(0, 0, w, h);
+
+      //store the current globalCompositeOperation
+      var compositeOperation = context.globalCompositeOperation;
+
+      //set to draw behind current content
+      context.globalCompositeOperation = "destination-over";
+
+      //set background color
+      context.fillStyle = backgroundColor;
+
+      //draw background / rect on entire canvas
+      context.fillRect(0,0,w,h);
+    }
+
+    //get the image data from the canvas
+    var imageData = canvas.toDataURL(`image/${type}`);
+
+    if(backgroundColor){
+      //clear the canvas
+      context.clearRect (0,0,w,h);
+
+      //restore it with original / cached ImageData
+      context.putImageData(data, 0,0);		
+
+      //reset the globalCompositeOperation to what it was
+      context.globalCompositeOperation = compositeOperation;
+    }
+
+    //return the Base64 encoded data url string
+    return imageData;
+  }
+
   getSaveData = () => {
     // Construct and return the stringified saveData object
     return JSON.stringify({
@@ -192,9 +234,8 @@ export default class extends PureComponent {
     });
   };
 
-  getDataURL = ( type ) => {
-    //generates the image data url (JPG format) from the HTML5 canvas element
-    return this.canvas.drawing.toDataURL( type );
+  getDataURL = ( type, backgroundColor ) => {
+    return this.canvasToRasterImage(this.canvas.drawing, type, backgroundColor)
   }
 
   loadSaveData = (saveData, immediate = this.props.immediateLoading) => {
