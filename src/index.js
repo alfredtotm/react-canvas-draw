@@ -192,15 +192,9 @@ export default class extends PureComponent {
     });
   };
 
-  getDataBlob = (fn) => {
-    return this.canvas.drawing.toBlob( blob => {
-      fn(blob);
-    }, "image/jpeg")
-  }
-
-  getDataURL = () => {
+  getDataURL = ( type ) => {
     //generates the image data url (JPG format) from the HTML5 canvas element
-    return this.canvas.drawing.toDataURL();
+    return this.canvas.drawing.toDataURL( type );
   }
 
   loadSaveData = (saveData, immediate = this.props.immediateLoading) => {
